@@ -94,3 +94,7 @@ func (s *schnorr) GenKeyPair() ([]byte, []byte, error) {
 
 	return privkey.Bytes(), pubkey.Bytes(), nil
 }
+
+func (s *schnorr) GetParams() (*big.Int, *big.Int, *big.Int) {
+	return s.p, s.q, s.g
+}

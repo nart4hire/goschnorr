@@ -56,3 +56,16 @@ func TestClassicSchnorr(t *testing.T) {
 	}
 	
 }
+
+func TestGetParams(t *testing.T) {
+	s, err := schnorr.NewSchnorr(rand.Reader, sha256.New())
+	if err != nil {
+		t.Errorf("Error: %s", err)
+	}
+
+	p, q, g := s.GetParams()
+
+	if p == nil || q == nil || g == nil {
+		t.Error("Error: Could not get params")
+	}
+}

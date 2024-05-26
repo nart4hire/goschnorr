@@ -21,6 +21,7 @@ type Schnorr interface {
 	Verify(pubkey, sig, hash []byte, message string) bool
 	Sign(privkey []byte, message string) ([]byte, []byte, error)
 	GenKeyPair() ([]byte, []byte, error)
+	GetParams() (*big.Int, *big.Int, *big.Int)
 }
 
 func NewClassicSchnorrFromParam(p, q, alpha *big.Int, rand io.Reader, hash hash.Hash) Schnorr {
@@ -97,4 +98,8 @@ func (s *classicschnorr) GenKeyPair() ([]byte, []byte, error) {
 	}
 
 	return privkey.Bytes(), pubkey.Bytes(), nil
+}
+
+func (s *classicschnorr) GetParams() (*big.Int, *big.Int, *big.Int) {
+	return s.p, s.q, s.alpha
 }
