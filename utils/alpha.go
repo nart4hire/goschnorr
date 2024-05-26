@@ -2,6 +2,7 @@ package utils
 
 import (
 	"errors"
+	"fmt"
 	"math/big"
 )
 
@@ -10,6 +11,12 @@ func AlphaGen(p, q *big.Int) (*big.Int, error) {
 	ctr := big.NewInt(1)
 	one := big.NewInt(1)
 	mod := new(big.Int)
+
+	if mod.Mod(p, q).Cmp(one) != 0 {
+		fmt.Println(mod.Mod(p, q))
+		return nil, errors.New("p != 1 mod q")
+	}
+
 	for mod.Exp(ctr, q, p).Cmp(one) != 0 {
 		ctr.Add(ctr, one)
 		if ctr.Cmp(limiter) == 0 {
@@ -21,8 +28,9 @@ func AlphaGen(p, q *big.Int) (*big.Int, error) {
 
 func SchnorrGen(p, q *big.Int) (*big.Int, error) {
 	one := big.NewInt(1)
-	mod := new(big.Int).Mod(p, q)
-	if mod.Cmp(one) != 0 {
+	mod := new(big.Int)
+	if mod.Mod(p, q).Cmp(one) != 0 {
+		fmt.Println(mod.Mod(p, q))
 		return nil, errors.New("p != 1 mod q")
 	}
 
