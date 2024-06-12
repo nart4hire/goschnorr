@@ -95,6 +95,20 @@ func (s *schnorr) GenKeyPair() ([]byte, []byte, error) {
 	return privkey.Bytes(), pubkey.Bytes(), nil
 }
 
+func (s *schnorr) GenFromPriv(privkey []byte) ([]byte, error) {
+	privkeyint := new(big.Int).SetBytes(privkey)
+	if privkeyint.Cmp(s.q) >= 0 {
+		return nil, errors.New("private key is larger than q")
+	}
+
+	pubkey := new(big.Int).Exp(s.g, new(big.Int).Neg(privkeyint), s.p)
+	if pubkey == nil {
+		return nil, errors.New("could not generate pubkey")
+	}
+
+	return pubkey.Bytes(), nil
+}
+
 func (s *schnorr) GetParams() (*big.Int, *big.Int, *big.Int) {
 	return s.p, s.q, s.g
 }
